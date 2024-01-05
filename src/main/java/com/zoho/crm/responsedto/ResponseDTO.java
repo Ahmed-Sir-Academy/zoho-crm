@@ -1,13 +1,13 @@
 package com.zoho.crm.responsedto;
 
 public class ResponseDTO {
-    private String response;
+    private Object response;
 
-    public String getResponse() {
+    public Object getResponse() {
         return response;
     }
 
-    public void setResponse(String response) {
+    public void setResponse(Object response) {
         this.response = response;
     }
 }
