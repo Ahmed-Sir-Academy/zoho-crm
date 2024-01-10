@@ -22,7 +22,7 @@ public class LoginController {
 
     //Body -> Raw -> JSON == @RequestBody
     //Param == @RequestParam
-    //Path == @RequestPath
+    //Path == @RequestPath | @PathVariable
 
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestParam(value = "username") String username, @RequestParam(value = "password") String password) {

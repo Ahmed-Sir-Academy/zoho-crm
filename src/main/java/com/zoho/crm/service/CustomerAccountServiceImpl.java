@@ -2,6 +2,7 @@ package com.zoho.crm.service;
 
 import com.zoho.crm.dao.CustomerDao;
 import com.zoho.crm.dao.LoginDao;
+import com.zoho.crm.entity.CustomerAccountEntity;
 import com.zoho.crm.entity.LoginEntity;
 import com.zoho.crm.responsedto.CustomerAccountDTO;
 import com.zoho.crm.responsedto.ResponseDTO;
@@ -34,12 +35,20 @@ public class CustomerAccountServiceImpl implements CustomerAccountService {
             LoginEntity loginEntity = loginDao.validateUserNameAndPasswordFromDataBase(customerAccountDTO.getUsername(), customerAccountDTO.getPassword());
 
             if (loginEntity != null) {
-                //Create the customer order
-                boolean account = customerDao.createAccount(customerAccountDTO);
-                if(account){
-                    responseDTO.setResponse("Created Customer Account");
-                }else{
-                    responseDTO.setResponse("Unable to create customer account");
+                //Validate the username
+                boolean userNamePresent = customerDao.findByUsername(customerAccountDTO.getUsername());
+
+                if (userNamePresent) {
+                    //UserName is present sending a custom message
+                    responseDTO.setResponse("Username is already taken");
+                } else {
+                    //Create the customer order
+                    boolean account = customerDao.createAccount(customerAccountDTO);
+                    if (account) {
+                        responseDTO.setResponse("Created Customer Account");
+                    } else {
+                        responseDTO.setResponse("Unable to create customer account");
+                    }
                 }
 
             } else {
@@ -48,6 +57,51 @@ public class CustomerAccountServiceImpl implements CustomerAccountService {
             }
         } else {
             responseDTO.setResponse(validateInputResponse);
+        }
+        return new ResponseEntity<>(responseDTO, HttpStatus.OK);
+    }
+
+    @Override
+    public ResponseEntity viewByUsername(String userName) {
+        ResponseDTO responseDTO = new ResponseDTO();
+        if (userName == null || userName.isEmpty()) {
+            responseDTO.setResponse("Username cannot be empty");
+        }
+
+        CustomerAccountEntity customerAccountEntity = customerDao.findByUsernameForView(userName);
+        responseDTO.setResponse(customerAccountEntity);
+        return new ResponseEntity<>(responseDTO, HttpStatus.OK);
+    }
+
+    @Override
+    public ResponseEntity deleteById(int id) {
+        ResponseDTO responseDTO = new ResponseDTO();
+        if (id == 0 || id < 0) {
+            responseDTO.setResponse("Id cannot be zero or less than zero");
+        } else {
+            boolean deleted = customerDao.deleteById(id);
+            if (deleted) {
+                responseDTO.setResponse("Successfully deleted the user for id " + id);
+            } else {
+                responseDTO.setResponse("No user found for id " + id);
+            }
+        }
+        return new ResponseEntity<>(responseDTO, HttpStatus.OK);
+    }
+
+    @Override
+    public ResponseEntity updateById(int id, CustomerAccountDTO customerAccountDTO) {
+        ResponseDTO responseDTO = new ResponseDTO();
+        if (id == 0 || id < 0) {
+            responseDTO.setResponse("Id cannot be zero or less than zero");
+        } else {
+           CustomerAccountEntity updatedEntity = customerDao.updateById(id,customerAccountDTO);
+           if(updatedEntity==null){
+               responseDTO.setResponse("The id given is not found");
+           }else{
+               responseDTO.setResponse(updatedEntity);
+           }
+
         }
         return new ResponseEntity<>(responseDTO, HttpStatus.OK);
     }
