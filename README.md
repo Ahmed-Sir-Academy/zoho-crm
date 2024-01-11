@@ -2,7 +2,7 @@
 
 # API Endpoint and Payload
 
-# UPDATE
+## UPDATE
 http://localhost:8080/customer/update/4
 
 {
@@ -14,17 +14,17 @@ http://localhost:8080/customer/update/4
 
 PUT Mapping
 
-# GET
+## GET
 http://localhost:8080/customer/view/touheed25
 
 GET MAPPING
 
-# DELETE
+## DELETE
 http://localhost:8080/customer/delete/2
 
 DELETE MAPPING
 
-# CREATE
+## CREATE
 http://localhost:8080/customer/create
 
 POST MAPPING
@@ -38,3 +38,9 @@ POST MAPPING
 "confirmPassword": "touheed@123",
 "address": "Bangalore 560045"
 }
+
+# JDBC
+## Fetch API
+http://localhost:8080/jdbc/fetch
+
+Get Mapping
