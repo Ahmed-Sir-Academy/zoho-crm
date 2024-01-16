@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.GetMapping;
 
 import java.util.StringJoiner;
 
@@ -54,11 +55,12 @@ public class CustomerAccountServiceImpl implements CustomerAccountService {
             } else {
                 //Return the response like username and password is not valid
                 responseDTO.setResponse("Given Username and Password is Wrong");
+                return new ResponseEntity<>(responseDTO, HttpStatus.OK);
             }
         } else {
             responseDTO.setResponse(validateInputResponse);
         }
-        return new ResponseEntity<>(responseDTO, HttpStatus.OK);
+        return new ResponseEntity<>(responseDTO, HttpStatus.CREATED);
     }
 
     @Override
@@ -69,6 +71,10 @@ public class CustomerAccountServiceImpl implements CustomerAccountService {
         }
 
         CustomerAccountEntity customerAccountEntity = customerDao.findByUsernameForView(userName);
+        if (customerAccountEntity == null) {
+            responseDTO.setResponse("No record found with username: " + userName);
+            return new ResponseEntity<>(responseDTO, HttpStatus.NO_CONTENT);
+        }
         responseDTO.setResponse(customerAccountEntity);
         return new ResponseEntity<>(responseDTO, HttpStatus.OK);
     }
@@ -95,12 +101,12 @@ public class CustomerAccountServiceImpl implements CustomerAccountService {
         if (id == 0 || id < 0) {
             responseDTO.setResponse("Id cannot be zero or less than zero");
         } else {
-           CustomerAccountEntity updatedEntity = customerDao.updateById(id,customerAccountDTO);
-           if(updatedEntity==null){
-               responseDTO.setResponse("The id given is not found");
-           }else{
-               responseDTO.setResponse(updatedEntity);
-           }
+            CustomerAccountEntity updatedEntity = customerDao.updateById(id, customerAccountDTO);
+            if (updatedEntity == null) {
+                responseDTO.setResponse("The id given is not found");
+            } else {
+                responseDTO.setResponse(updatedEntity);
+            }
 
         }
         return new ResponseEntity<>(responseDTO, HttpStatus.OK);

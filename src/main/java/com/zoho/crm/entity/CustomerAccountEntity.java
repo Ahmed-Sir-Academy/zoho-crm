@@ -16,19 +16,15 @@ public class CustomerAccountEntity {
     @Column(name = "last_name")
     private String lastName;
 
-    @Column(name = "age")
     private int age;
 
-    @Column(name = "username")
     private String username;
 
-    @Column(name = "password")
     private String password;
 
     @Column(name = "confirm_passowrd")
     private String confirmPassword;
 
-    @Column(name = "address")
     private String address;
 
     public int getId() {

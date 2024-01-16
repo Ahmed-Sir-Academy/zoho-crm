@@ -3,6 +3,7 @@ package com.zoho.crm.controller;
 import com.zoho.crm.responsedto.CustomerAccountDTO;
 import com.zoho.crm.service.CustomerAccountService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -43,5 +44,18 @@ public class CustomerController {
         return customerAccountView;
     }
 
+    @GetMapping("/error")
+    public ResponseEntity<?> errorTesting() {
+        int a = 10;
+        int b = 0;
+        try {
+            int c = a / b;
+            System.out.println(c);
+        } catch (Exception e) {
+            return new ResponseEntity<>(e, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+
+        return null;
+    }
 
 }
