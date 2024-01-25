@@ -6,16 +6,19 @@ import com.zoho.crm.entity.CustomerAccountEntity;
 import com.zoho.crm.entity.LoginEntity;
 import com.zoho.crm.responsedto.CustomerAccountDTO;
 import com.zoho.crm.responsedto.ResponseDTO;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.GetMapping;
 
 import java.util.StringJoiner;
 
 @Service
 public class CustomerAccountServiceImpl implements CustomerAccountService {
+
+    final static Logger log = LoggerFactory.getLogger(CustomerAccountServiceImpl.class);
 
     @Autowired
     LoginDao loginDao;
@@ -73,6 +76,7 @@ public class CustomerAccountServiceImpl implements CustomerAccountService {
         CustomerAccountEntity customerAccountEntity = customerDao.findByUsernameForView(userName);
         if (customerAccountEntity == null) {
             responseDTO.setResponse("No record found with username: " + userName);
+            log.error("No record found with username: " + userName);
             return new ResponseEntity<>(responseDTO, HttpStatus.NO_CONTENT);
         }
         responseDTO.setResponse(customerAccountEntity);
