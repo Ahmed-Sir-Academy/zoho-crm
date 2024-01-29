@@ -39,7 +39,7 @@ public class CustomerAccountServiceImpl implements CustomerAccountService {
             LoginEntity loginEntity = loginDao.validateUserNameAndPasswordFromDataBase(customerAccountDTO.getUsername(), customerAccountDTO.getPassword());
 
             if (loginEntity != null) {
-                //Validate the username
+                //Validate the username from customer table
                 boolean userNamePresent = customerDao.findByUsername(customerAccountDTO.getUsername());
 
                 if (userNamePresent) {
@@ -85,16 +85,21 @@ public class CustomerAccountServiceImpl implements CustomerAccountService {
 
     @Override
     public ResponseEntity deleteById(int id) {
+
         ResponseDTO responseDTO = new ResponseDTO();
-        if (id == 0 || id < 0) {
-            responseDTO.setResponse("Id cannot be zero or less than zero");
-        } else {
-            boolean deleted = customerDao.deleteById(id);
-            if (deleted) {
-                responseDTO.setResponse("Successfully deleted the user for id " + id);
+        try {
+            if (id == 0 || id < 0) {
+                responseDTO.setResponse("Id cannot be zero or less than zero");
             } else {
-                responseDTO.setResponse("No user found for id " + id);
+                boolean deleted = customerDao.deleteById(id);
+                if (deleted) {
+                    responseDTO.setResponse("Successfully deleted the user for id " + id);
+                } else {
+                    responseDTO.setResponse("No user found for id " + id);
+                }
             }
+        }finally {
+            System.out.println("This is without catch block");
         }
         return new ResponseEntity<>(responseDTO, HttpStatus.OK);
     }

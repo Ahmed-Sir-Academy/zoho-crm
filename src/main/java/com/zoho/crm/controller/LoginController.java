@@ -24,6 +24,7 @@ public class LoginController {
     //Param == @RequestParam
     //Path == @RequestPath | @PathVariable
 
+//    http://locolhost:8080/login?username=touheed&password=abc@123
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestParam(value = "username") String username, @RequestParam(value = "password") String password) {
         String response = "";
