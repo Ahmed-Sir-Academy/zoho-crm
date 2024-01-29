@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.*;
 public class CustomerController {
     final static Logger log = LoggerFactory.getLogger(CustomerController.class);
 
-    @Value("my.name")
+    @Value("${my.name}")
     private String myName;
 
     @Autowired
@@ -26,6 +26,7 @@ public class CustomerController {
     //create    http://localhost:8080/customer/create
     @PostMapping("create")
     public ResponseEntity<?> create(@RequestBody CustomerAccountDTO customerAccountDTO) {
+        log.info("Successfully read value from application.properties using @Value annotation and the value is "+myName);
         ResponseEntity customerAccountEntity = customerAccountService.create(customerAccountDTO);
         return customerAccountEntity;
     }
